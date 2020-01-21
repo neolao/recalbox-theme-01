@@ -1,0 +1,65 @@
+<!--
+theme name: neolao
+version:    1.0
+-->
+<theme>
+    <formatVersion>4</formatVersion>
+    <view name="system">
+        <image name="background" extra="true">
+            <path>./images/$system_background.jpg</path>
+            <size>0 1</size>
+            <pos>0.5 0.5</pos>
+            <origin>0.5 0.5</origin>
+        </image>
+        <sound name="bgsound">
+            <path>./sounds/$system.ogg</path>
+        </sound>
+        <image name="logo">
+            <path>./images/$system_logo.svg</path>
+        </image>
+        <helpsystem name="help">
+            <textColor>00000077</textColor>
+            <iconColor>00000077</iconColor>
+        </helpsystem>
+    </view>
+
+    <view name="basic, detailed">
+        <image name="background" extra="true">
+            <path>./images/$system_background.jpg</path>
+            <pos>0 0</pos>
+            <origin>0 0</origin>
+            <size>1 1</size>
+        </image>
+        <image name="footer" extra="true">
+            <pos>0 1</pos>
+            <origin>0 1</origin>
+            <size>1 0.065</size>
+            <path>./images/footer.png</path>
+        </image>
+
+        <textlist name="gamelist">
+            <selectorColor>393a3b</selectorColor>
+            <selectedColor>97999b</selectedColor>
+            <primaryColor>393a3b</primaryColor>
+            <secondaryColor>000000</secondaryColor>
+            <fontPath>./fonts/OPENSANS.TTF</fontPath>
+            <fontSize>0.03</fontSize>
+            <forceUppercase>1</forceUppercase>
+            <scrollSound>./sounds/scroll.wav</scrollSound>
+        </textlist>
+
+        <!-- Hidden -->
+        <image name="logo, md_lastplayed, md_playcount, md_favorite, md_description, md_rating, md_releasedate, md_developer, md_players, md_genre, md_publisher, md_lbl_rating, md_lbl_releasedate, md_lbl_developer, md_lbl_publisher, md_lbl_genre, md_lbl_players, md_lbl_lastplayed, md_lbl_playcount, md_lbl_playcount, md_lbl_favorite">
+            <path>./images/dummy.gif</path>
+            <pos>2 2</pos>
+        </image>
+    </view>
+    <view name="basic">
+        <textlist name="gamelist">
+            <pos>0 0</pos>
+            <size>1 0.9</size>
+            <alignment>left</alignment>
+            <horizontalMargin>0.01</horizontalMargin>
+        </textlist>
+    </view>
+</theme>
