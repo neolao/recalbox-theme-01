@@ -1,4 +1,4 @@
-const { opendir, copyFile, stat } = require("fs").promises;
+const { mkdir, opendir, copyFile, stat } = require("fs").promises;
 const { extname, basename } = require("path");
 const sharp = require("sharp");
 const loadGamelist = require("../utils/loadGamelist");
@@ -18,10 +18,12 @@ async function getGameImageSourcePath(systemDirectoryPath, game) {
   return `${__dirname}/images/default_game_image.png`;
 }
 
-function getGameImageDestinationPath(systemDirectoryPath, game) {
+async function getGameImageDestinationPath(systemDirectoryPath, game) {
   const extension = extname(game.path);
   const filename = basename(game.path, extension);
-  return `${systemDirectoryPath}/theme-neolao-01-generated/${filename}.png`;
+  const destinationDirectoryPath = `${systemDirectoryPath}/theme-neolao-01-generated`;
+  await mkdir(destinationDirectoryPath, { recursive: true });
+  return `${destinationDirectoryPath}/${filename}.png`;
 }
 
 async function composeWithPreviousAndNextImages(mainImagePath, previousImagePath, nextImagePath, destinationPath) {
@@ -60,7 +62,7 @@ async function generateGameImage(systemDirectoryPath, currentGame, previousGame,
   process.stdout.write(`  - ${currentGame.name} ... `);
 
   const currentImagePath = await getGameImageSourcePath(systemDirectoryPath, currentGame);
-  const destinationPath = getGameImageDestinationPath(systemDirectoryPath, currentGame);
+  const destinationPath = await getGameImageDestinationPath(systemDirectoryPath, currentGame);
 
   try {
     if (previousGame && nextGame) {
