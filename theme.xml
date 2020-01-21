@@ -1,12 +1,12 @@
 <!--
-theme name: neolao
+theme name: neolao 01
 version:    1.0
 -->
 <theme>
     <formatVersion>4</formatVersion>
     <view name="system">
         <image name="background" extra="true">
-            <path>./images/$system_background.jpg</path>
+            <path>./images/systems/$system_background.jpg</path>
             <size>0 1</size>
             <pos>0.5 0.5</pos>
             <origin>0.5 0.5</origin>
@@ -15,7 +15,7 @@ version:    1.0
             <path>./sounds/$system.ogg</path>
         </sound>
         <image name="logo">
-            <path>./images/$system_logo.svg</path>
+            <path>./images/systems/$system_logo.svg</path>
         </image>
         <helpsystem name="help">
             <textColor>00000077</textColor>
@@ -25,7 +25,7 @@ version:    1.0
 
     <view name="basic, detailed">
         <image name="background" extra="true">
-            <path>./images/$system_background.jpg</path>
+            <path>./images/systems/$system_background.jpg</path>
             <pos>0 0</pos>
             <origin>0 0</origin>
             <size>1 1</size>
