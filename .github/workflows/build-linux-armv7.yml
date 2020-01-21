@@ -1,0 +1,38 @@
+name: Build Linux ARMv7
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1.0.0
+
+      - name: Build
+        uses: uraimo/run-on-arch-action@v1.0.5
+        with:
+          architecture: armv7
+          distribution: buster
+          run: |
+            apt-get update && apt-get install -y wget
+            wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh | bash
+            export NVM_DIR="$HOME/.nvm"
+            . "$NVM_DIR/nvm.sh"
+            nvm install 12.2.0
+            npm ci
+            npm run build-linux-armv7
+            npm test
+
+      - name: Upload
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./cli
+          asset_name: cli-linux-armv7
+          asset_content_type: application/x-executable; charset=binary
+
