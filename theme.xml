@@ -30,12 +30,6 @@ version:    1.0
             <origin>0 0</origin>
             <size>1 1</size>
         </image>
-        <image name="footer" extra="true">
-            <pos>0 1</pos>
-            <origin>0 1</origin>
-            <size>1 0.065</size>
-            <path>./images/footer.png</path>
-        </image>
 
         <textlist name="gamelist">
             <selectorColor>393a3b</selectorColor>
@@ -53,6 +47,9 @@ version:    1.0
             <path>./images/dummy.gif</path>
             <pos>2 2</pos>
         </image>
+        <helpsystem name="help">
+            <pos>2 2</pos>
+        </helpsystem>
     </view>
     <view name="basic">
         <textlist name="gamelist">
@@ -61,5 +58,13 @@ version:    1.0
             <alignment>left</alignment>
             <horizontalMargin>0.01</horizontalMargin>
         </textlist>
+    </view>
+    <view name="detailed">
+        <image name="layout" extra="true">
+            <path>./images/gamelist_background.png</path>
+            <pos>0 0</pos>
+            <origin>0 0</origin>
+            <size>1 1</size>
+        </image>
     </view>
 </theme>
