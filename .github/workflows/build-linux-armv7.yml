@@ -17,7 +17,7 @@ jobs:
           architecture: armv7
           distribution: buster
           run: |
-            apt-get update && apt-get install -y wget build-essential gcc python make
+            apt-get update && apt-get install -y wget build-essential gcc python make zip
             wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh | bash
             export NVM_DIR="$HOME/.nvm"
             . "$NVM_DIR/nvm.sh"
@@ -25,6 +25,9 @@ jobs:
             npm ci
             npm run build-linux-armv7
             npm test
+            ls -lah ./node_modules/sharp/build
+            ls -lah ./node_modules/sharp/build/Release
+            zip -r sharp.zip ./node_modules/sharp/build/Release
 
       - name: Upload
         uses: actions/upload-release-asset@v1.0.1
@@ -35,4 +38,14 @@ jobs:
           asset_path: ./cli
           asset_name: cli-linux-armv7
           asset_content_type: application/x-executable; charset=binary
+
+      - name: Upload Sharp
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./sharp.zip
+          asset_name: sharp.zip
+          asset_content_type: application/zip
 
