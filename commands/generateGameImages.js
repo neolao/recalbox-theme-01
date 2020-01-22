@@ -3,6 +3,20 @@ const { extname, basename } = require("path");
 const sharp = require("sharp");
 const loadGamelist = require("../utils/loadGamelist");
 
+async function createGameName(name) {
+  let svg = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 854 480">';
+  svg += `<text x="250" y="300" font-size="55" style="fill: #0000ff; stroke: #000000;">${name}</text>`;
+  svg += "</svg>";
+  const svgBuffer = Buffer.from(svg);
+
+  return sharp(svgBuffer)
+    .resize(854, 480, {
+      withoutEnlargement: true
+    })
+    .png()
+    .toBuffer();
+}
+
 async function getGameImageSourcePath(systemDirectoryPath, game) {
   const extension = extname(game.path);
   const filename = basename(game.path, extension);
@@ -69,6 +83,7 @@ async function composeWithPreviousImage(mainImagePath, previousImagePath, destin
     ])
     .toFile(destinationPath);
 }
+
 async function composeWithNextImage(mainImagePath, nextImagePath, destinationPath) {
   const nextImage = await sharp(nextImagePath)
     .extract({ left: 0, top: 0, width: 854, height: 190 })
@@ -87,6 +102,14 @@ async function composeWithNextImage(mainImagePath, nextImagePath, destinationPat
       { input: mainImagePath, left: 0, top: 0 }
     ])
     .toFile(destinationPath);
+}
+
+async function addGameName(imagePath, name) {
+  const gameNameImage = await createGameName(name);
+
+  return sharp(imagePath)
+    .composite([{ input: gameNameImage, left: 0, top: 0 }])
+    .toFile(imagePath);
 }
 
 async function generateGameImage(systemDirectoryPath, currentGame, previousGame, nextGame) {
@@ -109,6 +132,8 @@ async function generateGameImage(systemDirectoryPath, currentGame, previousGame,
     } else {
       await copyFile(currentImagePath, destinationPath);
     }
+
+    await addGameName(destinationPath, currentGame.name);
   } catch (error) {
     process.stdout.write("ERROR\n");
     console.error(error);
