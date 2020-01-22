@@ -21,7 +21,7 @@ async function createGameName(name) {
         }
       </style>
     </defs>
-    <text x="${titleRight}" y="${marginTop + fontSize}" font-family="GameTitle" text-anchor="end" font-size="${fontSize}" style="fill: #ffffff; font-family: GameTitle"><![CDATA[${name}]]></text>
+    <text x="${titleRight}" y="${marginTop}" font-family="GameTitle" text-anchor="end" font-size="${fontSize}" style="fill: #ffffff; font-family: GameTitle"><![CDATA[${name}]]></text>
   </svg>`;
   const svgBuffer = Buffer.from(svg);
 
@@ -58,7 +58,12 @@ async function getGameImageDestinationPath(systemDirectoryPath, game) {
 
 async function composeWithPreviousAndNextImages(mainImagePath, previousImagePath, nextImagePath, destinationPath) {
   const previousImage = await sharp(previousImagePath)
-    .extract({ left: 0, top: imageHeight - marginBottom - borderSize - marginTop, width: imageWidth, height: marginBottom + borderSize + marginTop })
+    .extract({
+      left: 0,
+      top: imageHeight - marginBottom - borderSize - marginTop,
+      width: imageWidth,
+      height: marginBottom + borderSize + marginTop
+    })
     .greyscale()
     .toBuffer();
   const nextImage = await sharp(nextImagePath)
@@ -75,14 +80,19 @@ async function composeWithPreviousAndNextImages(mainImagePath, previousImagePath
   })
     .composite([
       { input: previousImage, left: 0, top: 0 },
-      { input: nextImage, left: 0, top: imageHeight - marginBottom - borderSize - marginTop},
+      { input: nextImage, left: 0, top: imageHeight - marginBottom - borderSize - marginTop },
       { input: mainImagePath, left: 0, top: 0 }
     ])
     .toFile(destinationPath);
 }
 async function composeWithPreviousImage(mainImagePath, previousImagePath, destinationPath) {
   const previousImage = await sharp(previousImagePath)
-    .extract({ left: 0, top: imageHeight - marginBottom - borderSize - marginTop, width: imageWidth, height: marginBottom + borderSize + marginTop })
+    .extract({
+      left: 0,
+      top: imageHeight - marginBottom - borderSize - marginTop,
+      width: imageWidth,
+      height: marginBottom + borderSize + marginTop
+    })
     .greyscale()
     .toBuffer();
   return sharp({
