@@ -6,7 +6,7 @@ const saveGamelist = require("../utils/saveGamelist");
 function getGameImagePath(game) {
   const extension = extname(game.path);
   const filename = basename(game.path, extension);
-  return `./theme-neolao-01/${filename}.png`;
+  return `./theme-neolao-01-generated/${filename}.png`;
 }
 
 async function updateSystemGamelist(directoryPath) {
