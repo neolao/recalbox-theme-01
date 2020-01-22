@@ -10,14 +10,14 @@ function getGameImagePath(game) {
 }
 
 async function updateSystemGamelist(directoryPath) {
-  process.stdout.write(`System ${directoryPath}:\n`);
   const gamelistPath = `${directoryPath}/gamelist.xml`;
+  process.stdout.write(`Update ${gamelistPath} ... `);
 
   let games;
   try {
     games = await loadGamelist(gamelistPath);
   } catch (error) {
-    process.stdout.write("No gamelist.xml\n\n");
+    process.stdout.write("Not found\n");
     return;
   }
 
@@ -28,10 +28,11 @@ async function updateSystemGamelist(directoryPath) {
   try {
     await saveGamelist(games, gamelistPath);
   } catch (error) {
-    process.stdout.write(`Unable to save ${gamelistPath}\n`);
+    process.stdout.write(`ERROR: Unable to save\n`);
+    return;
   }
 
-  process.stdout.write("\n");
+  process.stdout.write("OK\n");
 }
 
 module.exports = async function updateGamelists() {

@@ -3,14 +3,30 @@ const { extname, basename } = require("path");
 const sharp = require("sharp");
 const loadGamelist = require("../utils/loadGamelist");
 
+const imageWidth = 1920;
+const imageHeight = 1080;
+const marginTop = 200;
+const marginBottom = 200;
+const titleRight = 1580;
+const borderSize = 15;
+const fontSize = 60;
+
 async function createGameName(name) {
-  let svg = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 854 480">';
-  svg += `<text x="250" y="300" font-size="55" style="fill: #0000ff; stroke: #000000;">${name}</text>`;
-  svg += "</svg>";
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 ${imageWidth} ${imageHeight}">';
+    <defs>
+      <style type="text/css">
+        @font-face {
+          font-family: GameTitle;
+          src: url('${__dirname}/../fonts/OpenSans-ExtraBold.ttf') format("truetype");
+        }
+      </style>
+    </defs>
+    <text x="${titleRight}" y="${marginTop + fontSize}" font-family="GameTitle" text-anchor="end" font-size="${fontSize}" style="fill: #ffffff; font-family: GameTitle"><![CDATA[${name}]]></text>
+  </svg>`;
   const svgBuffer = Buffer.from(svg);
 
   return sharp(svgBuffer)
-    .resize(854, 480, {
+    .resize(imageWidth, imageHeight, {
       withoutEnlargement: true
     })
     .png()
@@ -42,37 +58,37 @@ async function getGameImageDestinationPath(systemDirectoryPath, game) {
 
 async function composeWithPreviousAndNextImages(mainImagePath, previousImagePath, nextImagePath, destinationPath) {
   const previousImage = await sharp(previousImagePath)
-    .extract({ left: 0, top: 480 - 190, width: 854, height: 190 })
+    .extract({ left: 0, top: imageHeight - marginBottom - borderSize - marginTop, width: imageWidth, height: marginBottom + borderSize + marginTop })
     .greyscale()
     .toBuffer();
   const nextImage = await sharp(nextImagePath)
-    .extract({ left: 0, top: 0, width: 854, height: 190 })
+    .extract({ left: 0, top: 0, width: imageWidth, height: marginTop + borderSize + marginBottom })
     .greyscale()
     .toBuffer();
   return sharp({
     create: {
-      width: 854,
-      height: 480,
+      width: imageWidth,
+      height: imageHeight,
       channels: 4,
       background: { r: 0, g: 0, b: 0, alpha: 0 }
     }
   })
     .composite([
       { input: previousImage, left: 0, top: 0 },
-      { input: nextImage, left: 0, top: 480 - 190 },
+      { input: nextImage, left: 0, top: imageHeight - marginBottom - borderSize - marginTop},
       { input: mainImagePath, left: 0, top: 0 }
     ])
     .toFile(destinationPath);
 }
 async function composeWithPreviousImage(mainImagePath, previousImagePath, destinationPath) {
   const previousImage = await sharp(previousImagePath)
-    .extract({ left: 0, top: 480 - 190, width: 854, height: 190 })
+    .extract({ left: 0, top: imageHeight - marginBottom - borderSize - marginTop, width: imageWidth, height: marginBottom + borderSize + marginTop })
     .greyscale()
     .toBuffer();
   return sharp({
     create: {
-      width: 854,
-      height: 480,
+      width: imageWidth,
+      height: imageHeight,
       channels: 4,
       background: { r: 0, g: 0, b: 0, alpha: 0 }
     }
@@ -86,19 +102,19 @@ async function composeWithPreviousImage(mainImagePath, previousImagePath, destin
 
 async function composeWithNextImage(mainImagePath, nextImagePath, destinationPath) {
   const nextImage = await sharp(nextImagePath)
-    .extract({ left: 0, top: 0, width: 854, height: 190 })
+    .extract({ left: 0, top: 0, width: imageWidth, height: marginTop + borderSize + marginBottom })
     .greyscale()
     .toBuffer();
   return sharp({
     create: {
-      width: 854,
-      height: 480,
+      width: imageWidth,
+      height: imageHeight,
       channels: 4,
       background: { r: 0, g: 0, b: 0, alpha: 0 }
     }
   })
     .composite([
-      { input: nextImage, left: 0, top: 480 - 190 },
+      { input: nextImage, left: 0, top: imageHeight - marginBottom - borderSize - marginTop },
       { input: mainImagePath, left: 0, top: 0 }
     ])
     .toFile(destinationPath);
