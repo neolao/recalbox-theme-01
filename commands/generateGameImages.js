@@ -141,7 +141,26 @@ async function addGameName(imagePath, name) {
   await unlink(temporaryPath);
 }
 
-async function generateGameImage(systemDirectoryPath, currentGame, previousGame, nextGame) {
+async function addPagination(imagePath, current, total) {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 ${imageWidth} ${imageHeight}">';
+    <text x="1760" y="860" text-anchor="end" font-size="30" fill="#ffffff" stroke="#000000" stroke-opacity="0.5"><![CDATA[${current}/${total}]]></text>
+  </svg>`;
+  const svgBuffer = await sharp(Buffer.from(svg))
+    .resize(imageWidth, imageHeight, {
+      withoutEnlargement: true
+    })
+    .png()
+    .toBuffer();
+
+  const temporaryPath = `${imagePath}.tmp.png`;
+  await copyFile(imagePath, temporaryPath);
+  await sharp(temporaryPath)
+    .composite([{ input: svgBuffer, left: 0, top: 0 }])
+    .toFile(imagePath);
+  await unlink(temporaryPath);
+}
+
+async function generateGameImage(systemDirectoryPath, currentIndex, total, currentGame, previousGame, nextGame) {
   process.stdout.write(`  - ${currentGame.name} ... `);
 
   const currentImagePath = await getGameImageSourcePath(systemDirectoryPath, currentGame);
@@ -163,6 +182,7 @@ async function generateGameImage(systemDirectoryPath, currentGame, previousGame,
     }
 
     await addGameName(destinationPath, currentGame.name);
+    await addPagination(destinationPath, currentIndex, total);
   } catch (error) {
     process.stdout.write("ERROR\n");
     console.error(error);
@@ -177,17 +197,18 @@ async function generateSystemGameImages(name, directoryPath) {
   const gamelistPath = `${directoryPath}/gamelist.xml`;
   try {
     const games = await loadGamelist(gamelistPath);
-    for (let index = 0; index < games.length; index++) {
+    const total = games.length;
+    for (let index = 0; index < total; index++) {
       const currentGame = games[index];
       let previousGame;
       let nextGame;
       if (index > 0) {
         previousGame = games[index - 1];
       }
-      if (index < games.length - 1) {
+      if (index < total - 1) {
         nextGame = games[index + 1];
       }
-      await generateGameImage(directoryPath, currentGame, previousGame, nextGame);
+      await generateGameImage(directoryPath, index + 1, total, currentGame, previousGame, nextGame);
     }
   } catch (error) {
     process.stdout.write(`No gamelist.xml\n`);

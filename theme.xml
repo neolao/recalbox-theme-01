@@ -26,9 +26,9 @@ version:    1.0
     <view name="basic, detailed">
         <image name="background" extra="true">
             <path>./images/systems/$system_background.jpg</path>
-            <pos>0 0</pos>
-            <origin>0 0</origin>
-            <size>1 1</size>
+            <pos>.5 .5</pos>
+            <origin>.5 .5</origin>
+            <size>0 1</size>
         </image>
 
         <textlist name="gamelist">
@@ -60,14 +60,16 @@ version:    1.0
     </view>
     <view name="detailed">
       <image name="md_image">
-        <pos>0 0</pos>
-        <origin>0 0</origin>
-        <size>1 1</size>
+        <pos>.5 .5</pos>
+        <origin>.5 .5</origin>
+        <size>0 1</size>
+        <zIndex>1</zIndex>
       </image>
       <video name="md_video">
-        <pos>.2 .25</pos>
-        <origin>0 0</origin>
-        <size>.5 .55</size>
+        <pos>.5 .5</pos>
+        <origin>.5 .5</origin>
+        <size>.5 0</size>
+        <zIndex>2</zIndex>
       </video>
     </view>
 </theme>
