@@ -59,5 +59,15 @@ version:    1.0
         </textlist>
     </view>
     <view name="detailed">
+      <image name="md_image">
+        <pos>0 0</pos>
+        <origin>0 0</origin>
+        <size>1 1</size>
+      </image>
+      <video name="md_video">
+        <pos>.2 .25</pos>
+        <origin>0 0</origin>
+        <size>.5 .55</size>
+      </video>
     </view>
 </theme>

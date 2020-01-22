@@ -7,7 +7,8 @@ const imageWidth = 1920;
 const imageHeight = 1080;
 const marginTop = 200;
 const marginBottom = 200;
-const titleRight = 1580;
+const titleX = 1580;
+const titleY = marginTop - 10;
 const borderSize = 15;
 const fontSize = 60;
 
@@ -21,7 +22,7 @@ async function createGameName(name) {
         }
       </style>
     </defs>
-    <text x="${titleRight}" y="${marginTop}" font-family="GameTitle" text-anchor="end" font-size="${fontSize}" style="fill: #ffffff; font-family: GameTitle"><![CDATA[${name}]]></text>
+    <text x="${titleX}" y="${titleY}" font-family="GameTitle" text-anchor="end" font-size="${fontSize}" style="fill: #ffffff; font-family: GameTitle"><![CDATA[${name}]]></text>
   </svg>`;
   const svgBuffer = Buffer.from(svg);
 
