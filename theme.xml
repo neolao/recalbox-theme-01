@@ -39,11 +39,10 @@ version:    1.0
             <fontPath>./fonts/OPENSANS.TTF</fontPath>
             <fontSize>0.03</fontSize>
             <forceUppercase>1</forceUppercase>
-            <scrollSound>./sounds/scroll.wav</scrollSound>
         </textlist>
 
         <!-- Hidden -->
-        <image name="logo, md_lastplayed, md_playcount, md_favorite, md_description, md_rating, md_releasedate, md_developer, md_players, md_genre, md_publisher, md_lbl_rating, md_lbl_releasedate, md_lbl_developer, md_lbl_publisher, md_lbl_genre, md_lbl_players, md_lbl_lastplayed, md_lbl_playcount, md_lbl_playcount, md_lbl_favorite">
+        <image name="gamelist, logo, md_lastplayed, md_playcount, md_favorite, md_description, md_rating, md_releasedate, md_developer, md_players, md_genre, md_publisher, md_lbl_rating, md_lbl_releasedate, md_lbl_developer, md_lbl_publisher, md_lbl_genre, md_lbl_players, md_lbl_lastplayed, md_lbl_playcount, md_lbl_playcount, md_lbl_favorite">
             <path>./images/dummy.gif</path>
             <pos>2 2</pos>
         </image>
