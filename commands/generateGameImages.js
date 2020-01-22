@@ -1,4 +1,4 @@
-const { mkdir, readdir, copyFile, stat } = require("fs").promises;
+const { mkdir, readdir, copyFile, stat, unlink } = require("fs").promises;
 const { extname, basename } = require("path");
 const sharp = require("sharp");
 const loadGamelist = require("../utils/loadGamelist");
@@ -106,10 +106,12 @@ async function composeWithNextImage(mainImagePath, nextImagePath, destinationPat
 
 async function addGameName(imagePath, name) {
   const gameNameImage = await createGameName(name);
-
-  return sharp(imagePath)
+  const temporaryPath = `${imagePath}.tmp.png`;
+  await copyFile(imagePath, temporaryPath);
+  await sharp(temporaryPath)
     .composite([{ input: gameNameImage, left: 0, top: 0 }])
     .toFile(imagePath);
+  await unlink(temporaryPath);
 }
 
 async function generateGameImage(systemDirectoryPath, currentGame, previousGame, nextGame) {
