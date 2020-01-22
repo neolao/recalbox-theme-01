@@ -1,5 +1,4 @@
 const { mkdir, readdir, copyFile, stat } = require("fs").promises;
-const fs = require("fs");
 const { extname, basename } = require("path");
 const sharp = require("sharp");
 const loadGamelist = require("../utils/loadGamelist");
@@ -29,11 +28,11 @@ async function getGameImageDestinationPath(systemDirectoryPath, game) {
 
 async function composeWithPreviousAndNextImages(mainImagePath, previousImagePath, nextImagePath, destinationPath) {
   const previousImage = await sharp(previousImagePath)
-    .extract({ left: 0, top: 480 - 190, width: 854, height: 190})
+    .extract({ left: 0, top: 480 - 190, width: 854, height: 190 })
     .greyscale()
     .toBuffer();
   const nextImage = await sharp(nextImagePath)
-    .extract({ left: 0, top: 0, width: 854, height: 190})
+    .extract({ left: 0, top: 0, width: 854, height: 190 })
     .greyscale()
     .toBuffer();
   return sharp({
@@ -53,7 +52,7 @@ async function composeWithPreviousAndNextImages(mainImagePath, previousImagePath
 }
 async function composeWithPreviousImage(mainImagePath, previousImagePath, destinationPath) {
   const previousImage = await sharp(previousImagePath)
-    .extract({ left: 0, top: 480 - 190, width: 854, height: 190})
+    .extract({ left: 0, top: 480 - 190, width: 854, height: 190 })
     .greyscale()
     .toBuffer();
   return sharp({
@@ -64,12 +63,15 @@ async function composeWithPreviousImage(mainImagePath, previousImagePath, destin
       background: { r: 0, g: 0, b: 0, alpha: 0 }
     }
   })
-    .composite([{ input: previousImage, left: 0, top: 0 }, { input: mainImagePath, left: 0, top: 0 }])
+    .composite([
+      { input: previousImage, left: 0, top: 0 },
+      { input: mainImagePath, left: 0, top: 0 }
+    ])
     .toFile(destinationPath);
 }
 async function composeWithNextImage(mainImagePath, nextImagePath, destinationPath) {
   const nextImage = await sharp(nextImagePath)
-    .extract({ left: 0, top: 0, width: 854, height: 190})
+    .extract({ left: 0, top: 0, width: 854, height: 190 })
     .greyscale()
     .toBuffer();
   return sharp({
@@ -80,7 +82,10 @@ async function composeWithNextImage(mainImagePath, nextImagePath, destinationPat
       background: { r: 0, g: 0, b: 0, alpha: 0 }
     }
   })
-    .composite([{ input: nextImage, left: 0, top: 480 - 190 }, { input: mainImagePath, left: 0, top: 0 }])
+    .composite([
+      { input: nextImage, left: 0, top: 480 - 190 },
+      { input: mainImagePath, left: 0, top: 0 }
+    ])
     .toFile(destinationPath);
 }
 
