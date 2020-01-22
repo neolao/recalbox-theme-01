@@ -25,22 +25,20 @@ jobs:
             npm ci
             ln -s ./node_modules/sharp/build/Release/sharp.node sharp.node
             mkdir modules
-            cp -r ./node_modules/sharp modules/
             npm run build-linux-armv7
             npm test
-            zip -r armv7.zip .
+            mkdir -p neolao-01/bin
+            cp cli neolao-01/bin
+            cp -r ./node_modules/sharp neolao-01/
+            cp ./node_modules/sharp/build/Release/sharp.node neolao-01/sharp.node
+            cp scripts/cli neolao-01/cli
+            cp theme.xml neolao-01/
+            cp -r images neolao-01/
+            cp -r sounds neolao-01/
+            cp -r fonts neolao-01/
+            zip -r armv7.zip neolao-01
 
       - name: Upload
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./cli
-          asset_name: cli-linux-armv7
-          asset_content_type: application/x-executable; charset=binary
-
-      - name: Upload Sharp
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -49,4 +47,5 @@ jobs:
           asset_path: ./armv7.zip
           asset_name: armv7.zip
           asset_content_type: application/zip
+
 

@@ -1,4 +1,5 @@
-const { mkdir, opendir, copyFile, stat } = require("fs").promises;
+const { mkdir, readdir, copyFile, stat } = require("fs").promises;
+const fs = require("fs");
 const { extname, basename } = require("path");
 const sharp = require("sharp");
 const loadGamelist = require("../utils/loadGamelist");
@@ -15,7 +16,7 @@ async function getGameImageSourcePath(systemDirectoryPath, game) {
   } catch (error) {
     // No source file
   }
-  return `${__dirname}/images/default_game_image.png`;
+  return `${process.cwd()}/images/default_game_image.png`;
 }
 
 async function getGameImageDestinationPath(systemDirectoryPath, game) {
@@ -28,33 +29,58 @@ async function getGameImageDestinationPath(systemDirectoryPath, game) {
 
 async function composeWithPreviousAndNextImages(mainImagePath, previousImagePath, nextImagePath, destinationPath) {
   const previousImage = await sharp(previousImagePath)
+    .extract({ left: 0, top: 480 - 190, width: 854, height: 190})
     .greyscale()
     .toBuffer();
   const nextImage = await sharp(nextImagePath)
+    .extract({ left: 0, top: 0, width: 854, height: 190})
     .greyscale()
     .toBuffer();
-  return sharp(mainImagePath)
+  return sharp({
+    create: {
+      width: 854,
+      height: 480,
+      channels: 4,
+      background: { r: 0, g: 0, b: 0, alpha: 0 }
+    }
+  })
     .composite([
-      { input: previousImage, top: -390 + 90 + 10 },
-      { input: nextImage, top: 390 - 90 - 10 },
-      { input: mainImagePath }
+      { input: previousImage, left: 0, top: 0 },
+      { input: nextImage, left: 0, top: 480 - 190 },
+      { input: mainImagePath, left: 0, top: 0 }
     ])
     .toFile(destinationPath);
 }
 async function composeWithPreviousImage(mainImagePath, previousImagePath, destinationPath) {
   const previousImage = await sharp(previousImagePath)
+    .extract({ left: 0, top: 480 - 190, width: 854, height: 190})
     .greyscale()
     .toBuffer();
-  return sharp(mainImagePath)
-    .composite([{ input: previousImage, top: -390 + 90 + 10 }, { input: mainImagePath }])
+  return sharp({
+    create: {
+      width: 854,
+      height: 480,
+      channels: 4,
+      background: { r: 0, g: 0, b: 0, alpha: 0 }
+    }
+  })
+    .composite([{ input: previousImage, left: 0, top: 0 }, { input: mainImagePath, left: 0, top: 0 }])
     .toFile(destinationPath);
 }
 async function composeWithNextImage(mainImagePath, nextImagePath, destinationPath) {
   const nextImage = await sharp(nextImagePath)
+    .extract({ left: 0, top: 0, width: 854, height: 190})
     .greyscale()
     .toBuffer();
-  return sharp(mainImagePath)
-    .composite([{ input: nextImage, top: 390 - 90 - 10 }, { input: mainImagePath }])
+  return sharp({
+    create: {
+      width: 854,
+      height: 480,
+      channels: 4,
+      background: { r: 0, g: 0, b: 0, alpha: 0 }
+    }
+  })
+    .composite([{ input: nextImage, left: 0, top: 480 - 190 }, { input: mainImagePath, left: 0, top: 0 }])
     .toFile(destinationPath);
 }
 
@@ -79,10 +105,11 @@ async function generateGameImage(systemDirectoryPath, currentGame, previousGame,
       await copyFile(currentImagePath, destinationPath);
     }
   } catch (error) {
-    process.stdout.write("ERROR");
+    process.stdout.write("ERROR\n");
+    console.error(error);
     return;
   }
-  process.stdout.write("OK");
+  process.stdout.write("OK\n");
 }
 
 async function generateSystemGameImages(name, directoryPath) {
@@ -99,7 +126,7 @@ async function generateSystemGameImages(name, directoryPath) {
         previousGame = games[index - 1];
       }
       if (index < games.length - 1) {
-        nextGame = games[games.length + 1];
+        nextGame = games[index + 1];
       }
       await generateGameImage(directoryPath, currentGame, previousGame, nextGame);
     }
@@ -111,9 +138,9 @@ async function generateSystemGameImages(name, directoryPath) {
 
 module.exports = async function generateGameImages() {
   const systemsDirectoryPath = "/recalbox/share/roms";
-  const systemDirectories = await opendir(systemsDirectoryPath);
-  for await (const systemDirectory of systemDirectories) {
-    const systemDirectoryPath = `${systemsDirectoryPath}/${systemDirectory.name}`;
-    await generateSystemGameImages(systemDirectory.name, systemDirectoryPath);
+  const systemDirectoryNames = await readdir(systemsDirectoryPath);
+  for await (const systemDirectoryName of systemDirectoryNames) {
+    const systemDirectoryPath = `${systemsDirectoryPath}/${systemDirectoryName}`;
+    await generateSystemGameImages(systemDirectoryName, systemDirectoryPath);
   }
 };

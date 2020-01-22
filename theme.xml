@@ -60,11 +60,5 @@ version:    1.0
         </textlist>
     </view>
     <view name="detailed">
-        <image name="layout" extra="true">
-            <path>./images/gamelist_background.png</path>
-            <pos>0 0</pos>
-            <origin>0 0</origin>
-            <size>1 1</size>
-        </image>
     </view>
 </theme>
