@@ -143,7 +143,7 @@ async function addGameName(imagePath, name) {
 
 async function addPagination(imagePath, current, total) {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 ${imageWidth} ${imageHeight}">';
-    <text x="1760" y="860" text-anchor="end" font-size="30" fill="#ffffff" stroke="#000000" stroke-opacity="0.5"><![CDATA[${current}/${total}]]></text>
+    <text x="1760" y="840" text-anchor="end" font-size="40" fill="#ffffff" stroke="#000000" stroke-opacity="0.5"><![CDATA[${current}/${total}]]></text>
   </svg>`;
   const svgBuffer = await sharp(Buffer.from(svg))
     .resize(imageWidth, imageHeight, {
@@ -181,8 +181,8 @@ async function generateGameImage(systemDirectoryPath, currentIndex, total, curre
       await copyFile(currentImagePath, destinationPath);
     }
 
-    await addGameName(destinationPath, currentGame.name);
     await addPagination(destinationPath, currentIndex, total);
+    await addGameName(destinationPath, currentGame.name);
   } catch (error) {
     process.stdout.write("ERROR\n");
     console.error(error);
