@@ -23,11 +23,12 @@ jobs:
             . "$NVM_DIR/nvm.sh"
             nvm install 12.2.0
             npm ci
+            ln -s ./node_modules/sharp/build/Release/sharp.node sharp.node
+            mkdir modules
+            cp -r ./node_modules/sharp modules/
             npm run build-linux-armv7
             npm test
-            ls -lah ./node_modules/sharp/build
-            ls -lah ./node_modules/sharp/build/Release
-            zip -r sharp.zip ./node_modules/sharp/build/Release
+            zip -r armv7.zip .
 
       - name: Upload
         uses: actions/upload-release-asset@v1.0.1
@@ -45,7 +46,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./sharp.zip
-          asset_name: sharp.zip
+          asset_path: ./armv7.zip
+          asset_name: armv7.zip
           asset_content_type: application/zip
 
