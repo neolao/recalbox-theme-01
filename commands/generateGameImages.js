@@ -143,7 +143,9 @@ async function addGameName(imagePath, name) {
 
 async function addPagination(imagePath, current, total) {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 ${imageWidth} ${imageHeight}">';
-    <text x="${titleX}" y="860" text-anchor="end" font-size="50" fill="#ffffff"><![CDATA[${current}/${total}]]></text>
+    <text x="${imageWidth - 20}" y="860" text-anchor="end" font-size="40" fill="#ffffff"><![CDATA[${current}]]></text>
+    <line x1="${imageWidth - 110}" y1="873" x2="${imageWidth - 20}" y2="873" stroke="#ffffff" stroke-width="2"/>
+    <text x="${imageWidth - 20}" y="920" text-anchor="end" font-size="40" fill="#ffffff"><![CDATA[${total}]]></text>
   </svg>`;
   const svgBuffer = await sharp(Buffer.from(svg))
     .resize(imageWidth, imageHeight, {
