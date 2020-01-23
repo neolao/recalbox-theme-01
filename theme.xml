@@ -29,6 +29,7 @@ version:    1.0
             <pos>.5 .5</pos>
             <origin>.5 .5</origin>
             <size>0 1</size>
+            <zIndex>1</zIndex>
         </image>
 
         <textlist name="gamelist">
@@ -63,13 +64,24 @@ version:    1.0
         <pos>.5 .5</pos>
         <origin>.5 .5</origin>
         <size>0 1</size>
-        <zIndex>1</zIndex>
+        <zIndex>40</zIndex>
       </image>
       <video name="md_video">
         <pos>.5 .5</pos>
         <origin>.5 .5</origin>
         <size>.5 0</size>
-        <zIndex>2</zIndex>
+        <zIndex>50</zIndex>
       </video>
+      <textlist name="gamelist">
+            <pos>0 0.11</pos>
+            <size>0.83 .1</size>
+            <alignment>right</alignment>
+            <fontSize>0.06</fontSize>
+            <selectorColor>00000000</selectorColor>
+            <selectedColor>ffffff</selectedColor>
+            <primaryColor>ffffff</primaryColor>
+            <secondaryColor>ffffff</secondaryColor>
+            <zIndex>60</zIndex>
+        </textlist>
     </view>
 </theme>
