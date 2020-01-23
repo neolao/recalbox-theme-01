@@ -73,8 +73,8 @@ version:    1.0
         <zIndex>50</zIndex>
       </video>
         <textlist name="gamelist">
-            <pos>0 0.11</pos>
-            <size>0.83 .1</size>
+          <pos>0 0.165</pos>
+            <size>0.605 .1</size>
             <alignment>right</alignment>
             <fontSize>0.06</fontSize>
             <selectorColor>00000000</selectorColor>
