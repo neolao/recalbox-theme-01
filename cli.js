@@ -7,7 +7,7 @@ const updateGamelists = require("./commands/updateGamelists");
 
 program.version(info.version);
 program
-  .command("generateGameImages")
+  .command("generateGameImages [system]")
   .description("Generate game images")
   .action(generateGameImages);
 program

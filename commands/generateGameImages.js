@@ -218,10 +218,13 @@ async function generateSystemGameImages(name, directoryPath) {
   process.stdout.write(`\n`);
 }
 
-module.exports = async function generateGameImages() {
+module.exports = async function generateGameImages(systemName) {
   const systemsDirectoryPath = "/recalbox/share/roms";
   const systemDirectoryNames = await readdir(systemsDirectoryPath);
   for await (const systemDirectoryName of systemDirectoryNames) {
+    if (systemName && systemDirectoryName !== systemName) {
+      continue;
+    }
     const systemDirectoryPath = `${systemsDirectoryPath}/${systemDirectoryName}`;
     await generateSystemGameImages(systemDirectoryName, systemDirectoryPath);
   }
