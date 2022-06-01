@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "commander": "^4.1.0",
-    "sharp": "^0.24.0",
+    "sharp": "^0.30.5",
     "xml2js": "^0.4.23"
   },
   "devDependencies": {
